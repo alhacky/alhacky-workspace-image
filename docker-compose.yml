@@ -1,0 +1,26 @@
+---
+version: "3.7"
+services:
+  kasm:
+    build: .
+    image: ghcr.io/alhacky/devsecops-workspace-image:main
+    ports:
+      - "6901:6901"
+    environment:
+      VNC_PW: password
+    shm_size: '512m'
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    network_mode: bridge
+    volumes:
+      - type: bind
+        source: ./kasm_user
+        target: /home/kasm-user
+    devices:
+      - "/dev/ttyACM0"
+    device_cgroup_rules:
+      - "c 188:* rmw"
+    privileged: true
+    security_opt:
+      - seccomp=unconfined
+...
